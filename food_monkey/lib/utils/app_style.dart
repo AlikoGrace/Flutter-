@@ -13,8 +13,6 @@ const Color kLightGrey = Color(0xffededed);
 const Color kGrey = Color(0xFF9397A0);
 
 const Color kwhite= Color(0xffffffff);
-const Color klightWhite= Color(0xffeff5f4);
-
 
 
 final kPoppinsExtraBold = GoogleFonts.poppins(
