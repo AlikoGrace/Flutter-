@@ -63,6 +63,7 @@ class MyHomePage extends StatelessWidget {
             width: 150,
             child:Divider(
               color: Colors.teal.shade100,
+              thickness:3,
 
             ),),
 
