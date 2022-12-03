@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'quiz_brain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 QuizBrain quizBrain = QuizBrain();
 // to know what to encapsulate, ask yourself what should be hidden from the user
@@ -33,6 +34,43 @@ class Quizzer extends StatefulWidget {
 
 class _QuizzerState extends State<Quizzer> {
   // Question q1 = Question(q: "The human body has 89 tissues", a: false);
+  List<Icon> scoreKeeper = [];
+
+  void checkAnswer(bool userCheckedAnswer) {
+    bool correctAnswer = quizBrain.getQuestionAnswer();
+    setState(() {
+      if (quizBrain.isFinished() == true) {
+        //a package rFlutter
+        Alert(
+          context: context,
+          title: 'Finished!',
+          desc: 'You\'ve reached the end of the quiz.',
+        ).show();
+
+        quizBrain.reset();
+
+        scoreKeeper = [];
+        //  resets the scoreKeeper and makes it zero.
+      }
+      //if it hasn't gotten to the end of the game, then continue to check the
+      // grades
+      else {
+        if (correctAnswer == userCheckedAnswer) {
+          scoreKeeper.add(Icon(
+            Icons.check,
+            color: Colors.green,
+          ));
+        } else {
+          scoreKeeper.add(Icon(
+            Icons.close,
+            color: Colors.red,
+          ));
+        }
+        quizBrain.nextQuestion();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,6 +82,7 @@ class _QuizzerState extends State<Quizzer> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
+              flex: 5,
               child: Center(
                 child: Text(
                   // quizBrain.questionBank[questionNumber].questionText,
@@ -54,23 +93,11 @@ class _QuizzerState extends State<Quizzer> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              flex: 5,
             ),
             Expanded(
                 child: TextButton(
                     onPressed: () {
-                      bool correctAnswer =
-
-                          // quizBrain.questionBank[questionNumber].questionAnswer;
-                          quizBrain.getQuestionAnswer();
-                      if (correctAnswer == true) {
-                        print("you are right ");
-                      } else {
-                        print("you are wrong");
-                      }
-                      setState(() {
-                        quizBrain.nextQuestion();
-                      });
+                      checkAnswer(true);
                     },
                     child: Container(
                       // padding: EdgeInsets.symmetric(
@@ -89,15 +116,7 @@ class _QuizzerState extends State<Quizzer> {
             Expanded(
               child: TextButton(
                 onPressed: () {
-                  bool correctAnswer = quizBrain.getQuestionAnswer();
-                  if (correctAnswer == false) {
-                    print("you are right");
-                  } else {
-                    print("you are wrong");
-                  }
-                  setState(() {
-                    quizBrain.nextQuestion();
-                  });
+                  checkAnswer(false);
                 },
                 child: Container(
                   width: double.infinity,
@@ -115,7 +134,7 @@ class _QuizzerState extends State<Quizzer> {
               ),
             ),
             Row(
-              children: [],
+              children: scoreKeeper,
             )
           ],
         ),
